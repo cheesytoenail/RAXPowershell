@@ -2,7 +2,16 @@
 Clear-Host
 Write-Output "Enter the ticket subject to search"
 Write-Output "e.g. Proactive Patching - June 2017 (Manual)"
-$Subject = Read-Host -Prompt "Enter Search Criteria"
+##Subject Input
+do {
+    try {
+        $stest = $true
+        $Subject = Read-Host -Prompt "Enter Search Criteria"
+    } ##End Try
+    catch {
+        $stest = $false
+    } ##End Catch
+} until (($Subject -ne $null) -and $stest)
 ##Search Warning
 Write-Output "Searching..."
 ##Ticket Search
