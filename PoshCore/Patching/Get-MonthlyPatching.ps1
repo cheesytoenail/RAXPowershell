@@ -3,6 +3,8 @@ Clear-Host
 Write-Output "Enter the ticket subject to search"
 Write-Output "e.g. Proactive Patching - June 2017 (Manual)"
 $Subject = Read-Host -Prompt "Enter Search Criteria"
+##Search Warning
+Write-Output "Searching..."
 ##Ticket Search
 $Tickets = Find-CoreTicket -Subjects "$Subject" -Attributes Misc -State All
 ##While Loop
