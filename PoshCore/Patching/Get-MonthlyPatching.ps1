@@ -59,7 +59,7 @@ do {
     }
     ##Output
     Clear-Host
-    $Result | Out-GridView
+    $Result | Out-GridView -Title "Tickets Found"
     ##Repeat
     $Repeat = Read-Host -Prompt "Select a different queue? (Y/N)"
 ##Repeat Switch if required
