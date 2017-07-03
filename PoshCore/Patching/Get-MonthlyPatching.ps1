@@ -52,9 +52,21 @@ do {
     } until (($Queue -ge 1 -and $Queue -le 3) -and $qTest)
     ##Filter Queue
     switch ($Queue) {
-        1 {$Result = $Tickets | Where-Object {$_.queue_id -eq 683} | Select-Object number, assignee_name, status_name, support_team}
-        2 {$Result = $Tickets | Where-Object {$_.queue_id -eq 26} | Select-Object number, assignee_name, status_name, support_team}
-        3 {$Result = $Tickets | Where-Object {$_.queue_id -eq 389} | Select-Object number, assignee_name, status_name, support_team}
+        1 {$Result = $Tickets | Where-Object {$_.queue_id -eq 683} | Select-Object  @{Name = "Ticket Number"; Expression = {$_."number"}},
+                                                                                    @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
+                                                                                    @{Name = "Status"; Expression = {$_."status_name"}},
+                                                                                    @{Name = "Team"; Expression = {$_."support_team"}}
+        }
+        2 {$Result = $Tickets | Where-Object {$_.queue_id -eq 26} | Select-Object   @{Name = "Ticket Number"; Expression = {$_."number"}},
+                                                                                    @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
+                                                                                    @{Name = "Status"; Expression = {$_."status_name"}},
+                                                                                    @{Name = "Team"; Expression = {$_."support_team"}}
+        }
+        3 {$Result = $Tickets | Where-Object {$_.queue_id -eq 389} | Select-Object  @{Name = "Ticket Number"; Expression = {$_."number"}},
+                                                                                    @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
+                                                                                    @{Name = "Status"; Expression = {$_."status_name"}},
+                                                                                    @{Name = "Team"; Expression = {$_."support_team"}}
+        }
         Default {}
     }
     ##Output
@@ -62,7 +74,7 @@ do {
     $Result | Out-GridView -Title "Tickets Found"
     ##Repeat
     $Repeat = Read-Host -Prompt "Select a different queue? (Y/N)"
-##Repeat Switch if required
+    ##Repeat Switch if required
 } while ($Repeat -notlike "N")
 ######################################################
 #QUEUE END
