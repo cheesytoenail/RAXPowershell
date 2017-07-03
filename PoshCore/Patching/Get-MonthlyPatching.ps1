@@ -1,4 +1,19 @@
 ######################################################
+#MODULE CHECK BEGIN
+######################################################
+##Test for PoshCore Module
+try {
+    Get-Module -Name "PoshCore"
+} ##End Try
+catch {
+
+} ##End Catch
+
+######################################################
+#MODULE CHECK END
+######################################################
+
+######################################################
 #SUBJECT BEGIN
 ######################################################
 ##Subject Prompt
@@ -12,9 +27,9 @@ do {
         $Subject = Read-Host -Prompt "Enter Search Criteria"
     } ##End Try
     catch {
-        $stest = $false
+        $sTest = $false
     } ##End Catch
-} until (($Subject -ne $null) -and $stest)
+} until (($Subject -ne $null) -and $sTest)
 ##Search Warning
 Write-Output "Searching..."
 ######################################################
@@ -33,7 +48,7 @@ $Tickets = Find-CoreTicket -Subjects "$Subject" -Attributes Misc -State All
 ######################################################
 #QUEUE BEGIN
 ######################################################
-##While Loop
+##Do Loop
 do {
     ##Queue Prompt
     Clear-Host
@@ -75,7 +90,7 @@ do {
     ##Repeat
     $Repeat = Read-Host -Prompt "Select a different queue? (Y/N)"
     ##Repeat Switch if required
-} while ($Repeat -notlike "N")
+} while ($Repeat -notlike "N") ##End Do Loop
 ######################################################
 #QUEUE END
 ######################################################
