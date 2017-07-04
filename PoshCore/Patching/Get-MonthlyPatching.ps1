@@ -26,7 +26,8 @@ do {
         $Subject = Read-Host -Prompt "Enter Search Criteria"
     } ##End Try
     catch {
-        $sTest = $false
+        Write-Output "Failed Subject Entry See Error Below"
+        throw $_
     } ##End Catch
 } until (($Subject -ne $null) -and $sTest)
 ##Search Warning
@@ -61,7 +62,8 @@ do {
             $Queue = Read-Host -Prompt "Select the queue to pick from"
         } ##End Try
         catch {
-            $qTest = $false
+            Write-Output "Failed Queue Selection See Error Below"
+            throw $_
         } ##End Catch
     } until (($Queue -ge 1 -and $Queue -le 3) -and $qTest)
     ##Filter Queue
