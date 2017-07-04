@@ -65,7 +65,7 @@ do {
             Write-Output "Failed Queue Selection See Error Below"
             throw $_
         } ##End Catch
-    } until (($Queue -ge 1 -and $Queue -le 3) -and $qTest)
+    } until (($Queue -ge 1 -and $Queue -le 3) -and $qTest) ##End Nested Do
     ##Filter Queue
     switch ($Queue) {
         1 {$Result = $Tickets | Where-Object {$_.queue_id -eq 683} | Select-Object  @{Name = "Ticket Number"; Expression = {$_."number"}},
@@ -83,8 +83,7 @@ do {
                                                                                     @{Name = "Status"; Expression = {$_."status_name"}},
                                                                                     @{Name = "Team"; Expression = {$_."support_team"}}
         }
-        Default {}
-    }
+    } ## End Switch
     ##Output
     Clear-Host
     $Result | Out-GridView -Title "Tickets Found"
