@@ -2,13 +2,12 @@
 #MODULE CHECK BEGIN
 ######################################################
 ##Test for PoshCore Module
-try {
-    Get-Module -Name "PoshCore"
-} ##End Try
-catch {
-
-} ##End Catch
-
+Clear-Host
+$ModuleCheck = Get-Module -Name "PoshCore"
+if (!$ModuleCheck) {
+    Write-Output "PoshCore Not Installed - See https://rax.io/PoshCore"
+    break
+}
 ######################################################
 #MODULE CHECK END
 ######################################################
