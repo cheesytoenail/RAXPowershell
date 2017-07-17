@@ -68,22 +68,21 @@ do {
     } until (($Queue -ge 1 -and $Queue -le 3) -and $qTest) ##End Nested Do
     ##Filter Queue
     switch ($Queue) {
-        1 {$Result = $Tickets | Where-Object {$_.queue_id -eq 683} | Select-Object  @{Name = "Ticket Number"; Expression = {$_."number"}},
-                                                                                    @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
-                                                                                    @{Name = "Status"; Expression = {$_."status_name"}},
-                                                                                    @{Name = "Team"; Expression = {$_."support_team"}}
+        1 {
+            $QueueID = 683
         }
-        2 {$Result = $Tickets | Where-Object {$_.queue_id -eq 26} | Select-Object   @{Name = "Ticket Number"; Expression = {$_."number"}},
-                                                                                    @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
-                                                                                    @{Name = "Status"; Expression = {$_."status_name"}},
-                                                                                    @{Name = "Team"; Expression = {$_."support_team"}}
+        2 {
+            $QueueID = 26
         }
-        3 {$Result = $Tickets | Where-Object {$_.queue_id -eq 389} | Select-Object  @{Name = "Ticket Number"; Expression = {$_."number"}},
-                                                                                    @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
-                                                                                    @{Name = "Status"; Expression = {$_."status_name"}},
-                                                                                    @{Name = "Team"; Expression = {$_."support_team"}}
+        3 {
+            $QueueID = 389
         }
     } ## End Switch
+    ##Results
+    $Result = $Tickets | Where-Object {$_.queue_id -eq $QueueID} | Select-Object    @{Name = "Ticket Number"; Expression = {$_."number"}},
+                                                                                    @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
+                                                                                    @{Name = "Status"; Expression = {$_."status_name"}},
+                                                                                    @{Name = "Team"; Expression = {$_."support_team"}}
     ##Output
     Clear-Host
     $Result | Out-GridView -Title "Tickets Found"
