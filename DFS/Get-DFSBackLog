@@ -1,63 +1,72 @@
 # Function
-function Get-DFSBacklogs {
+function Get-DFSBacklog {
 
     # Get all replication groups
-    $replicationgroups = dfsradmin rg list;
+    $ReplicationGroups = dfsradmin rg list;
  
     # Reduce loop by 3 lines to filter out junk from dfsradmin
     $i = 0;
-    $imax = ($replicationgroups.count - 3);
+    $imax = ($ReplicationGroups.count - 3);
  
     # Loop through each replication group
-    foreach ($replicationgroup in $replicationgroups) {
+    foreach ($ReplicationGroup in $ReplicationGroups) {
  
         # Exclude first and last two lines as junk, and exclude the domain system volume
-        if (($i -ge 1) -and ($i -le $imax) -and ($replicationgroup -notlike "*domain system volume*")) {
+        if (($i -ge 1) -and ($i -le $imax) -and ($ReplicationGroup -notlike "*domain system volume*")) {
  
             # Format replication group name
-            $replicationgroup = $replicationgroup.split(" ");
-            $replicationgroup[-1] = "";
-            $replicationgroup = ($replicationgroup.trim() -join " ").trim();
+            $ReplicationGroup = $ReplicationGroup.split(" ");
+            $ReplicationGroup[-1] = "";
+            $ReplicationGroup = ($ReplicationGroup.trim() -join " ").trim();
  
             # Get and format replication folder name
-            $replicationfolder = & cmd /c ("dfsradmin rf list /rgname:`"{0}`"" -f $replicationgroup);
-            $replicationfolder = (($replicationfolder[1].split("\"))[0]).trim();
+            $ReplicationFolder = & cmd /c ("dfsradmin rf list /rgname:`"{0}`"" -f $ReplicationGroup);
+            $ReplicationFolder = (($ReplicationFolder[1].split("\"))[0]).trim();
  
             # Get servers for the current replication group
-            $replicationservers = & cmd /c ("dfsradmin conn list /rgname:`"{0}`"" -f $replicationgroup);
+            $ReplicationServers = & cmd /c ("dfsradmin conn list /rgname:`"{0}`"" -f $ReplicationGroup);
  
             # Reduce loop by 3 lines to filter out junk from dfsradmin 
             $j = 0;
-            $jmax = ($replicationservers.count - 3);
+            $jmax = ($ReplicationServers.count - 3);
  
             # Loop through each replication member server
-            foreach ($replicationserver in $replicationservers) {
+            foreach ($ReplicationServer in $ReplicationServers) {
  
                 # Exclude first and last two lines as junk
                 if (($j -ge 1) -and ($j -le $jmax)) {
  
                     # Format server names
-                    $sendingserver = ($replicationserver.split()| where {$_})[0].trim();
-                    $receivingserver = ($replicationserver.split()| where {$_})[1].trim();
+                    $SendingServer = ($ReplicationServer.split()| Where-Object {$_})[0].trim();
+                    $ReceivingServer = ($ReplicationServer.split()| Where-Object {$_})[1].trim();
  
                     # Get backlog count with dfsrdiag
-                    $backlog = & cmd /c ("dfsrdiag backlog /rgname:`"{0}`" /rfname:`"{1}`" /smem:{2} /rmem:{3}" -f $replicationgroup, $replicationfolder, $sendingserver, $receivingserver);
+                    $Backlog = & cmd /c ("dfsrdiag backlog /rgname:`"{0}`" /rfname:`"{1}`" /smem:{2} /rmem:{3}" -f $ReplicationGroup, $ReplicationFolder, $SendingServer, $ReceivingServer);
  
-                    $backlogcount = ($backlog[1]).split(":")[1];
+                    $Backlogcount = ($Backlog[1]).split(":")[1];
  
                     # Format backlog count
-                    if ($backlogcount -ne $null) {
+                    if ($Backlogcount -ne $null) {
  
-                        $backlogcount = $backlogcount.trim();
+                        $Backlogcount = $Backlogcount.trim();
                     }
                     else {
                     
-                        $backlogcount = 0;
+                        $Backlogcount = 0;
                     }
  
-                    # Create output string to <replication group> <sending server> <receiving server> <backlog count>;
-                    $outline = $replicationgroup + " From: " + $sendingserver + " To: " + $receivingserver + " Backlog: " + $backlogcount;
-                    $outline;
+                    # Create output string to <replication group> <sending server> <receiving server> <Backlog count>;
+                    $outline = $ReplicationGroup + " From: " + $SendingServer + " To: " + $ReceivingServer + " Backlog: " + $Backlogcount;
+                    if ($Backlogcount -notlike "0") {
+
+                        Write-Host $outline -ForegroundColor Red   
+
+                    }
+                    else {
+
+                        Write-Host $outline -ForegroundColor Green
+
+                    }
  
                 }
  
