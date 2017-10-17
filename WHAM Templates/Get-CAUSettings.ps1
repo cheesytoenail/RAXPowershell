@@ -54,14 +54,29 @@ Function Get-CAUSettings
             $Output.ErrorMsg = "Server not compatible with CAU/Must be 2012 R2 or later"
             return $Output
         }
+        #Test for cmdlet presence
+        if ((Get-Command Get-Cluster -ErrorAction SilentlyContinue) -eq $null) {
+            $Output.ErrorMsg - "Required Get-Cluster cmdlet not available"
+            return $Output
+        }
         #Test if server is a part of a cluster
         if ((Get-Cluster -ErrorAction SilentlyContinue) -eq $null) {
             $Output.ErrorMsg = "Server is not a member of a cluster"
             return $Output
         }
+        #Test for cmdlet presence
+        if ((Get-Command Get-CauClusterRole -ErrorAction SilentlyContinue) -eq $null) {
+            $Output.ErrorMsg - "Required Get-CauClusterRole cmdlet not available"
+            return $Output
+        }
         #Test CAU Installed
         if ((Get-CauClusterRole -ErrorAction SilentlyContinue) -eq $null) {
             $Output.ErrorMsg = "Server has no CAU configuration"
+            return $Output
+        }
+        #Test for cmdlet presence
+        if ((Get-Command Get-CauReport -ErrorAction SilentlyContinue) -eq $null) {
+            $Output.ErrorMsg - "Required Get-CauClusterRole cmdlet not available"
             return $Output
         }
         #CAU Report
