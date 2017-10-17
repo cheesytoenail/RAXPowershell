@@ -8,6 +8,7 @@
     WHAM - keywords: Patching,Patch,Cluster,CAU,Aware
     WHAM - Prerequisites: No
     WHAM - Makes changes: No
+    WHAM - Column Header: GetCAUSettings
     #Option metadata below
     WHAM - Script time out (min): 1
  
@@ -65,7 +66,7 @@ Function Get-CAUSettings
         }
         #CAU Report
         if ((Get-CauReport -ErrorAction SilentlyContinue) -eq $null) {
-            $Output.LastRunStatus = "CAU has never run"
+            $Output.'Last Run Status' = "CAU has never run"
         }
         if ((Get-CauReport -ErrorAction SilentlyContinue) -ne $null) {
             $CAUReport = Get-CauReport | Select-Object -Last 1
