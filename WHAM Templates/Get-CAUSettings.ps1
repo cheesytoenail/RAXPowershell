@@ -1,37 +1,37 @@
 <#
     .SYNOPSIS
-    <Basic Function Example, with single PSO output. Brief description of what script does. max 72 characters>
+    CAU configuration and last run time
       
     .DESCRIPTION
-    Full description: <Detailed description of what script does>
+    Full description: Tests for correct OS/Cluster Member/CAU Configuration, Returns configuration & if applicable last run time
     WHAM - supported: Yes
-    WHAM - keywords: XXXXX,XXXXX,XXXXX,XXXXX
-    WHAM - Prerequisites: Yes/No
+    WHAM - keywords: Patching,Patch,Cluster,CAU,Aware
+    WHAM - Prerequisites: No
     WHAM - Makes changes: No
-    WHAM - Column Header: <Column Header to be displayed in output>
     #Option metadata below
     WHAM - Script time out (min): 1
-    WHAM - Download File: ExampleZip.zip
-    WHAM - Get IPs from CORE: Yes (Remove if No)
-    WHAM - Isolate: Yes (Remove if No)
-    WHAM - Used By: Name of other WHAM script that uses this function
-    WHAM - TSQL: Yes (Remove if No)
  
     .EXAMPLE
-    Full command: <example command>
-    Description: <description of what the command does>
-    Output: <List output>
+    Full command: Get-CAUSettings
+    Description: CAU configuration and last run time
       
     .OUTPUTS
-    <List outputs>
+    Last Run Status : Succeeded
+    Time            : 05:00
+    Last Run Time   : 27/09/2017 05:00:01
+    Failback        : Immediate
+    Week            : 5
+    ErrorMsg        : -
+    Day             : Wednesday
+    Server          : 111111-DB1
        
     .NOTES
-    Minimum OS: 2008 R2
-    Minimum PoSh: 2.0
+    Minimum OS: 2012 R2
+    Minimum PoSh: 4.0
     Version Table:
-    Version :: Author             :: Live Date   :: JIRA     :: QC          :: Description
+    Version :: Author             :: Live Date   :: JIRA      :: QC          :: Description
     -----------------------------------------------------------------------------------------------------------
-    1.0     :: Powell Shellington :: 01-JAN-2001 :: IAWW-111 :: Joe Bloggs  :: Release
+    1.0     :: Richard Weston     ::             :: IAWW-1621 ::             :: Release
 #>
 Function Get-CAUSettings
 {
