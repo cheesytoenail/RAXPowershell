@@ -39,33 +39,50 @@ Function Get-CAUSettings
     {
         #Create output object
         $Output = New-Object PSObject -Property @{
-            Server = $ENV:ComputerName
-            OutputItem1 = "-"
-            OutputItem2 = "-"
+            "Server" = $ENV:ComputerName
+            "Time" = "-"
+            "Day" = "-"
+            "Week" = "-"
+            "Failback" = "-"
+            "Last Run Status" = "-"
+            "Last Run Time" = "-"
+            "ErrorMsg" = "-"
         }
         #Test for correct version of Windows
         if (!([Environment]::OSVersion.Version) -ge (New-Object 'Version' 6,3)) {
-            $Output = "Server not compatible with CAU"
+            $Output.ErrorMsg = "Server not compatible with CAU/Must be 2012 R2 or later"
+            return $Output
         }
         #Test if server is a part of a cluster
         if ((Get-Cluster -ErrorAction SilentlyContinue) -eq $null) {
-            $Output = "Server is not a member of a cluster"
+            $Output.ErrorMsg = "Server is not a member of a cluster"
+            return $Output
         }
         #Test CAU Installed
         if ((Get-CauClusterRole -ErrorAction SilentlyContinue) -eq $null) {
-            $Output = "Server has no CAU configuration"
+            $Output.ErrorMsg = "Server has no CAU configuration"
+            return $Output
+        }
+        #CAU Report
+        if ((Get-CauReport -ErrorAction SilentlyContinue) -eq $null) {
+            $Output.LastRunStatus = "CAU has never run"
+        }
+        if ((Get-CauReport -ErrorAction SilentlyContinue) -ne $null) {
+            $CAUReport = Get-CauReport | Select-Object -Last 1
+            $Output.'Last Run Status' = $CAUReport.Status
+            $Output.'Last Run Time' = $CAUReport.StartTimestamp
         }
         #Get CAU settings
         $Output.Time = (Get-CauClusterRole | Where-Object {$_.Name -like "StartDate"}).Value.ToShortTimeString().Trim()
-        $Output.Day = (Get-CauClusterRole | Where-Object {$_.Name -like "DaysOfWeek"}).Value.Trim()
-        $Output.Week = (Get-CauClusterRole | Where-Object {$_.Name -like "WeeksOfMonth"}).Value.Trim()
-        $Output.Failback = (Get-CauClusterRole | Where-Object {$_.Name -like "FailbackMode"}).Value.Trim()
-        
+        $Output.Day = (Get-CauClusterRole | Where-Object {$_.Name -like "DaysOfWeek"}).Value
+        $Output.Week = (Get-CauClusterRole | Where-Object {$_.Name -like "WeeksOfMonth"}).Value.ToInt32($null)
+        $Output.Failback = (Get-CauClusterRole | Where-Object {$_.Name -like "FailbackMode"}).Value
+        #Function Output
         Return $Output
     }
     Catch
     {
-        $Output.OutputItem1 = "Powershell exception :: Line# $($_.InvocationInfo.ScriptLineNumber) :: $($_.Exception.Message)"
+        $Output = "Powershell exception :: Line# $($_.InvocationInfo.ScriptLineNumber) :: $($_.Exception.Message)"
         Return $Output
     }
 }
