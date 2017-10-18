@@ -50,13 +50,13 @@ Function Get-CAUSettings
             "ErrorMsg" = "-"
         }
         #Test for correct version of Windows
-        if (!([Environment]::OSVersion.Version) -ge (New-Object 'Version' 6,3)) {
+        if (([Environment]::OSVersion.Version) -lt ([version]'6.3')) {
             $Output.ErrorMsg = "Server not compatible with CAU/Must be 2012 R2 or later"
             return $Output
         }
         #Test for cmdlet presence
         if ((Get-Command Get-Cluster -ErrorAction SilentlyContinue) -eq $null) {
-            $Output.ErrorMsg - "Required Get-Cluster cmdlet not available"
+            $Output.ErrorMsg = "Required Get-Cluster cmdlet not available"
             return $Output
         }
         #Test if server is a part of a cluster
@@ -66,7 +66,7 @@ Function Get-CAUSettings
         }
         #Test for cmdlet presence
         if ((Get-Command Get-CauClusterRole -ErrorAction SilentlyContinue) -eq $null) {
-            $Output.ErrorMsg - "Required Get-CauClusterRole cmdlet not available"
+            $Output.ErrorMsg = "Required Get-CauClusterRole cmdlet not available"
             return $Output
         }
         #Test CAU Installed
@@ -76,7 +76,7 @@ Function Get-CAUSettings
         }
         #Test for cmdlet presence
         if ((Get-Command Get-CauReport -ErrorAction SilentlyContinue) -eq $null) {
-            $Output.ErrorMsg - "Required Get-CauClusterRole cmdlet not available"
+            $Output.ErrorMsg = "Required Get-CauClusterRole cmdlet not available"
             return $Output
         }
         #CAU Report
