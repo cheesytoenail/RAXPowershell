@@ -81,9 +81,9 @@ function Get-MonthlyPatching {
         } ## End Switch
         ##Results
         $Result = $Tickets | Where-Object {$_.queue_id -eq $QueueID} | Select-Object    @{Name = "Ticket Number"; Expression = {$_."number"}},
-        @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
-        @{Name = "Status"; Expression = {$_."status_name"}},
-        @{Name = "Team"; Expression = {$_."support_team"}}
+                                                                                        @{Name = "Ticket Owner"; Expression = {$_."assignee_name"}},
+                                                                                        @{Name = "Status"; Expression = {$_."status_name"}},
+                                                                                        @{Name = "Team"; Expression = {$_."support_team"}}
         ##Output
         Clear-Host
         $Selections = $Result | Out-GridView -Title "Tickets Found" -PassThru
