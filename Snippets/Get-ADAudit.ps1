@@ -46,12 +46,12 @@ function Get-ADAudit () {
     $FullDomain = $FullDomain -join ","
     ## Corrects OU Structure based on City
     switch ($ChildDomain) {
-        "DFW" { $City = "OU=Rax,OU=Dallas"    }
-        "HKG" { $City = "OU=Rax,OU=HongKong"  }
-        "IAD" { $City = "OU=Rax,OU=Dulles"    }
-        "LON" { $City = "OU=Rax,OU=London"    }
-        "ORD" { $City = "OU=Rax,OU=Chicago"   }
-        "SYD" { $City = "OU=Rax,OU=Sydney"    }
+        "DFW"      { $City = "OU=Rax,OU=Dallas"    }
+        "HKG"      { $City = "OU=Rax,OU=HongKong"  }
+        "IAD"      { $City = "OU=Rax,OU=Dulles"    }
+        "LON"      { $City = "OU=Rax,OU=London"    }
+        "ORD"      { $City = "OU=Rax,OU=Chicago"   }
+        "SYD"      { $City = "OU=Rax,OU=Sydney"    }
         "GlobalRS" { $City = "OU=Rax"              }
     }
     ## Parameter Account Input/Validation
