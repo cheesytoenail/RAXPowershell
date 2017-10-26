@@ -16,14 +16,24 @@ function Get-ADAudit () {
     if (!($ChildDomain -eq $null)) {
         do {
             try {
-                [ValidateSet("DFW", "HKG", "IAD", "LON", "ORD", "SYD","GlobalRS")]$ChildDomain = Read-Host -Prompt "Enter Domain (e.g. DFW/HKG/IAD/LON/ORD/SYD/GlobalRS)"
-            } catch {}
+                [ValidateSet(
+                    "DFW",
+                    "HKG",
+                    "IAD",
+                    "LON",
+                    "ORD",
+                    "SYD",
+                    "GlobalRS"
+                )]$ChildDomain = Read-Host -Prompt "Enter Domain (e.g. DFW/HKG/IAD/LON/ORD/SYD/GlobalRS)"
+            }
+            catch {}
         } until ($?)
     }
     ## Check for Intensive/GlobalRS
     if ($ChildDomain -eq "GlobalRS") {
         $Server = $ChildDomain + ".Rack.Space"
-    } else {
+    }
+    else {
         $Server = $ChildDomain + ".intensive.int"
     }    
     ## DNS Array
@@ -36,13 +46,13 @@ function Get-ADAudit () {
     $FullDomain = $FullDomain -join ","
     ## Corrects OU Structure based on City
     switch ($ChildDomain) {
-        "DFW"       { $City = "OU=Rax,OU=Dallas"    }
-        "HKG"       { $City = "OU=Rax,OU=HongKong"  }
-        "IAD"       { $City = "OU=Rax,OU=Dulles"    }
-        "LON"       { $City = "OU=Rax,OU=London"    }
-        "ORD"       { $City = "OU=Rax,OU=Chicago"   }
-        "SYD"       { $City = "OU=Rax,OU=Sydney"    }
-        "GlobalRS"  { $City = "OU=Rax"              }
+        "DFW" { $City = "OU=Rax,OU=Dallas"    }
+        "HKG" { $City = "OU=Rax,OU=HongKong"  }
+        "IAD" { $City = "OU=Rax,OU=Dulles"    }
+        "LON" { $City = "OU=Rax,OU=London"    }
+        "ORD" { $City = "OU=Rax,OU=Chicago"   }
+        "SYD" { $City = "OU=Rax,OU=Sydney"    }
+        "GlobalRS" { $City = "OU=Rax"              }
     }
     ## Parameter Account Input/Validation
     if (!($Account -eq $null)) {
