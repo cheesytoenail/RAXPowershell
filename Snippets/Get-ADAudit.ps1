@@ -51,7 +51,17 @@ function Get-ADAudit () {
                 [ValidatePattern('[0-9]')]$Account = Read-Host -Prompt "Enter Account Number"
             }
             catch {}
-        } until (($?) -and (Get-ADOrganizationalUnit -Server $Server -Identity "OU=$Account,$City,$FullDomain"))
+            try {
+                $OUTest = Get-ADOrganizationalUnit -Server $Server -Identity "OU=$Account,$City,$FullDomain" -ErrorAction SilentlyContinue
+            }
+            catch {}
+            if ($OUTest -eq $null) {
+                Write-Host "OU Not Found" -ForegroundColor Red
+            }
+            if (!($OUTest -eq $null)) {
+                Write-Host "OU Found" -ForegroundColor Green
+            }
+        } until (($?) -and (!($OUTest -eq $null)))
     }
     ## Distinguished Name
     $DistinguishedName = "OU=" + $Account + "," + $City + "," + $FullDomain
