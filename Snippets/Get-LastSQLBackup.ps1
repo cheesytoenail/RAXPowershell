@@ -8,6 +8,18 @@ function Get-LastSQLBackup () {
     if (!($DBName)) {
         [string]$DBName = Read-Host -Prompt "Enter name of SQL database to check"
     }
-    [string]$DBName = $DBName + ","
-    Get-EventLog -LogName Application | Where-Object {$_.Message -like "*$DBName*"} | Select-Object -First 1 | Format-List
+    [string]$DBName = $DBName.Trim() + ","
+    try {
+        $Backup = Get-EventLog -LogName Application | Where-Object {$_.Message -like "*$DBName*"} | Select-Object -First 1
+    }
+    catch {
+        throw $_
+    }
+    if (!($Backup -eq $null)) {
+        $Output = $Backup
+    }
+    if ($Backup -eq $null) {
+        $Output = "No backup found for this database"
+    }
+    $Output
 }
